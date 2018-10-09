@@ -38,6 +38,18 @@
 						"shareName": "ReWwwM7s61Y_3DyP3-LJMmBTOFqgUxdY2QfFdz1zdLE@cr4dev",
 						"shareKey": "X2TLA4ilG2PIPjR_r0jrlrP0qaZgSmSos1WC80B2EKkWjTHOrtpJOMSyAJGizHt2HmvOzqwi2QnDWkBK4fFXxg~~"
 					}
+				},
+				{
+					"id": 1,
+					"name": "从分享进入2群",
+					"pathName": "pages/index/main",
+					"query": "",
+					"scene": "1044",
+					"shareInfo": {
+						"groupName": "测试模拟群2",
+						"shareName": "ReWwwM7s61Y_3DyP3-LJMrNLANIr_KghSl5CGqAv2wY@cr4dev",
+						"shareKey": "w7OesmzfK3QVlnMtncVMSXWfjGcwkd99cXqSRYU0NcfbgAdLu2dVHOEe22AQyqndHYMNaGu-NIHwcGyy2bQv8g~~"
+					}
 				}
 			]
 		}

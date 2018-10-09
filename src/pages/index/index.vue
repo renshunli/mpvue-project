@@ -43,6 +43,7 @@ import counterStore from '../counter/store.js';
 import appStore from '../../store.js'
 import { checkLoginService, loginwxService, joinGroupService, addGroupService } from '../../api/api.js';
 
+
 export default {
     data() {
         return {
@@ -75,6 +76,7 @@ export default {
         }
     },
     onShareAppMessage(resMessage) {
+        var createType = resMessage.target.id === 'create' ? 1 : 0;
         var that = this;
         wx.showShareMenu({
             withShareTicket: true
@@ -82,46 +84,43 @@ export default {
         console.log(`这是通过：${resMessage.from}`)
         console.log(this);
         // 分享卡片内容
-        if (resMessage.target.id === 'create') {
-            return {
-                title: that.groupName,
-                imageUrl: 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLERLpErfNmo2B9ZIECmbEkwvVsX3hpCY6C0Ksfl0CJS3HnxfZYFm2hIMRvScewFQT96RgQkffXdw/132',
-                desc: that.introduction,
-                path: 'pages/index/index',
-                success(res) {
-                    // 转发成功，向后台发送openGId
-                    console.log(res)
-                    wx.getShareInfo({
-                        shareTicket: res.shareTickets[0],
-                        async success(res) {
-                            try {
-                                console.log('已成功获取到加密信息')
-                                console.log(res);
-                                var result = await addGroupService({
-                                    sessionKey: wx.getStorageSync("skey"),
-                                    ...res,
-                                    categoryName: that.categoryName,
-                                    groupName: that.groupName,
-                                    introduction: that.introduction
-                                })
-                                console.log(result);
-                            } catch (error) {
-                                console.log(error)
-                            }
-                        },
-                        fail(res) {
-                            console.log(res)
-                        }
-                    })
-                },
-                fail: (res) => {
-                    // 转发失败
-                    console.log(res)
-                }
-            }
-        }
         return {
-            title: "分享"
+            title: that.groupName,
+            imageUrl: 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLERLpErfNmo2B9ZIECmbEkwvVsX3hpCY6C0Ksfl0CJS3HnxfZYFm2hIMRvScewFQT96RgQkffXdw/132',
+            desc: that.introduction,
+            path: 'pages/index/index',
+            success(res) {
+                // 转发成功，向后台发送openGId
+                console.log(res)
+                wx.getShareInfo({
+                    shareTicket: res.shareTickets[0],
+                    async success(res) {
+                        try {
+                            console.log('已成功获取到加密信息')
+                            console.log(res);
+                            var result = await addGroupService({
+                                sessionKey: wx.getStorageSync("skey"),
+                                encryptedData: encodeURIComponent(res.encryptedData),
+                                iv: encodeURIComponent(res.iv),
+                                categoryName: that.categoryName,
+                                groupName: that.groupName,
+                                introduction: that.introduction,
+                                createType
+                            })
+                            console.log(result);
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    },
+                    fail(res) {
+                        console.log(res)
+                    }
+                })
+            },
+            fail: (res) => {
+                // 转发失败
+                console.log(res)
+            }
         }
     },
 }

@@ -4,34 +4,37 @@ import { checkLoginService, loginwxService, joinGroupService } from './api/api.j
 export default {
     onLaunch(ops){
         console.log(ops);
-        //从分享进入项目
-        if(ops && ops.scene == 1044){
-            console.log(ops.shareTicket)
-            console.log("从分享进入的用户")
-            wx.getShareInfo({
-                shareTicket: ops.shareTicket,
-                async complete(res){
-                    console.log(res)
-                    try {
-                        let result = await joinGroupService({
-                            sessionKey: wx.getStorageSync("skey"),
-                            ...res,
-                        })
-                        console.log(result);
-                    } catch (error) {
-                        console.log(error);
-                    }
-                }
-            })
-        }
-    },
-    created() {
         // 登录
         this.getUserInfo((userInfo) => {
             appStore.commit('setUserInfo',userInfo);
+            this.shareJoinGroup(ops)
         })
     },
     methods:{
+        shareJoinGroup(ops){
+            //从分享进入项目
+            if(ops && ops.scene == 1044){
+                console.log(ops.shareTicket)
+                console.log("从分享进入的用户")
+                wx.getShareInfo({
+                    shareTicket: ops.shareTicket,
+                    async complete(res){
+                        console.log(res)
+                        try {
+                            encodeURIComponent
+                            let result = await joinGroupService({
+                                sessionKey: wx.getStorageSync("skey"),
+                                encryptedData: encodeURIComponent(res.encryptedData),
+                                iv: encodeURIComponent(res.iv)
+                            })
+                            console.log(result);
+                        } catch (error) {
+                            console.log(error);
+                        }
+                    }
+                })
+            }
+        },
         wxLogin(cb) {
             var that = this;
             wx.login({
